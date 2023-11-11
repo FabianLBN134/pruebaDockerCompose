@@ -1,5 +1,8 @@
 version: '3.8'
 
+networks:
+  redPokeBird:
+
 services:
 
   mysqldb:
@@ -14,6 +17,8 @@ services:
       MYSQL_DATABASE: pokeBird
       MYSQL_USER: FabianLBN
       MYSQL_PASSWORD: 123456
+    networks:
+      redPokeBird:
 
   wordpress:
     depends_on:
@@ -31,6 +36,8 @@ services:
       WORDPRESS_DB_USER: FabianLBN
       WORDPRESS_DB_PASSWORD: 123456
       WORDPRESS_DB_NAME: pokeBird
+    networks:
+      redPokeBird:
 
   phpmyadmin:
     depends_on:
@@ -42,3 +49,5 @@ services:
     environment:
       PMA_HOTS: mysqldb
       MYSQL_ROOT_PASSWORD: password
+    networks:
+      redPokeBird:
