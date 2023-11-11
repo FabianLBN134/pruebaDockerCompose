@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+
+  mysqldb:
+    image: mysql:5.7
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - 4306:3306   # (Interno(local):externo) Se puede acceder a esta db de forma local por el puerto 4306 y para conexiones externas es el 3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: pokeBird
+      MYSQL_USER: FabianLBN
+      MYSQL_PASSWORD: 123456
+
+  wordpress:
+    depends_on:
+      - mysqldb
+    image: wordpress:latest
+    volumes:
+      - ./src/plugins:/var/www/html/wp-content/plugins
+      #- ./src/themes:/var/www/html/wp-content/themes
+      - ./src/uploads:/var/www/html/wp-content/uploads
+    restart: always
+    ports:
+      - 8000:80
+    environment:
+      WORDPRESS_DB_HOST: mysqldb
+      WORDPRESS_DB_USER: FabianLBN
+      WORDPRESS_DB_PASSWORD: 123456
+      WORDPRESS_DB_NAME: pokeBird
+
+  phpmyadmin:
+    depends_on:
+      - mysqldb
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOTS: mysqldb
+      MYSQL_ROOT_PASSWORD: password
